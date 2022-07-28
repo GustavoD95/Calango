@@ -1,0 +1,142 @@
+algoritmo logistica;
+// Síntese
+//  Objetivo: CALCULAR O FRETE DE ACORDO COM O PESO(KG) DA CARGA, TAXA ADICIONAL DE ACORDO COM A REGIÃO, TAXA ADICIONAL DE ACORDO COM O TIPO DE VÉICULO, O PERCENTUAL DA EMPRESA E 
+//O PERCENTUAL DO ENTREGADOR.
+//  Entrada : NOME DO ENTREGADOR, PESO(KG) DA CARGA, REGIÃO E TIPO DE VEÍCULO.
+//  SaídA : NOME DO ENTREGADOR SEGUIDO PELA VALOR DA SUA PORCENTAGEM, VALOR DO FRETE EM RELAÇÃO AO PESO(KG) DA CARGA, REGIÃO DE ENTREGA E SEU PERCENTUAL DE TAXA, VALOR DA TAXA PELA REGIÃO, 
+//TIPO DE VÉICULO SEGUIDO DO PERCENTUAL DA SUA TAXA, VALOR FINAL DA ENTREGA, PERCENTUAL DA EMPRESA E O PERCENTUAL DO ENTREGADOR.
+
+
+principal
+	// Declarações
+	inteiro qtdEntregadores, i;
+	real peso[6], valorPeso[6], taxaRegiao[6], valorTotal[6], taxaVei[6], percentEmpresa[6], percentEntregador[6];
+	texto nome[6], regiao[6], tipoVeiculo[6];
+
+
+	// Instruções
+
+	//FUNÇÃO PARA CHAMAR O MENU
+	menu();
+
+	escreva("DIGITE A QUANTIDADE DE ENTREGADORES SELECIONADOS PARA FAZER A ENTREGA: ");
+	leia(qtdEntregadores); // LER A QUANTIDADE DE ENTREGADORES SELECIONADOS.
+
+	enquanto(qtdEntregadores < 0 ou qtdEntregadores > 7)faca
+	  escreva("QUANTIDADE DE ENTREGADORES INVÁLIDO. DIGITE UM NÚMERO ENTRE 1 E 6: ");
+	  leia(qtdEntregadores);
+	fimEnquanto
+
+	se(qtdEntregadores >= 1 e qtdEntregadores <= 7 )entao //VERIFICA SE O NÚMERO DE ENTREGADORES ESTÁ ENTRE 1 E 6.
+		para(i de 0 ate qtdEntregadores-1 passo 1)faca
+			escreva("DIGITE O NOME DO ENTREGADOR: ");
+			leia(nome[i]);
+          
+			escreva("DIGITE O PESO(KG) DA CARGA: ");
+			leia(peso[i]);
+
+			enquanto(peso[i] < 0 ou peso[i] > 2000)faca
+			   escreva("PESO(KG) INVÁLIDO. DIGITE UM VALOR ENTRE 1 E 2000 KG: ");
+			   leia(peso[i]);
+			fimEnquanto
+          
+			//CÁLCULO PARA VALOR DO FRENTE PELO PESO
+			
+			valorPeso[i] = peso[i] * 5.20;
+		 
+			escreva("DIGITE A REGIÃO (EM MAIUSCÚLA): ");
+			leia(regiao[i]);
+         
+			se(comparaTexto(regiao[i], "NORTE")==0)entao
+				taxaRegiao[i]= 0.4559;
+			senao
+				se(comparaTexto(regiao[i], "NORDESTE")==0)entao
+					taxaRegiao[i] = 0.4035;
+				senao
+					se(comparaTexto(regiao[i], "CENTRO-OESTE")==0)entao
+						taxaRegiao[i] = 0.2196;
+					senao
+						se(comparaTexto(regiao[i],"SUDESTE")==0)entao
+							taxaRegiao[i] = 0.3248;
+						senao
+							se(comparaTexto(regiao[i],"SUL")==0)entao
+								taxaRegiao[i] = 0.3673;
+							senao
+								escreva("REGIÃO INVÁLIDA. DIGITE NOVAMENTE (EM MAIUSCÚLA): ");
+								leia(regiao[i]);
+							fimSe
+						fimSe
+					fimSe
+				fimSe
+			fimSe
+        
+         
+			escreva("DIGITE O TIPO DE VEÍCULO (EM MAIUSCÚLO): ");
+			leia(tipoVeiculo[i]); 
+         
+			se(comparaTexto(tipoVeiculo[i], "KOMBI")==0)entao
+				taxaVei[i] = 0.6485;
+			senao
+				se(comparaTexto(tipoVeiculo[i], "VAN")==0)entao
+					taxaVei[i] = 0.4315;
+				senao
+					se(comparaTexto(tipoVeiculo[i], "CAMINHÃO")==0)entao
+						taxaVei[i] = 0.2250;
+					senao
+						escreval("TIPO DE VEÍCULO INVÁLIDO. DIGITE NOVAMENTE (EM MAIUSCÚLO):");
+						leia(tipoVeiculo[i]);
+					fimSe
+				fimSe
+			fimSe
+        
+			//CÁLCULO DO VALOR TOTAL
+			valorTotal[i] = valorPeso[i] + (valorPeso[i] *taxaRegiao[i]) + (valorPeso[i] * taxaVei[i]);
+         
+			//PORCENTAGEM DA EMPRESA
+			percentEmpresa[i] = valorTotal[i] * 0.65;
+         
+			//PORCENTAGEM DO ENTREGADOR
+			percentEntregador[i] = valorTotal[i] * 0.35;
+         
+			limpaTela();
+         
+			//MOSTRA NA TELA
+			escreval("");
+			escreval("ENTREGADOR RESPONSÁVEL: ", nome[i]);
+			escreval("VALOR DO FRETE EM RELAÇÃO AO PESO(KG) DA CARGA = R$", valorPeso[i]::2);
+			escreval("REGIÃO DE ENTREGA: ", regiao[i], " / PERCENTUAL DA TAXA = ", taxaRegiao[i] * 100::2, "%");
+			escreval("VALOR DA TAXA PELA REGIÃO = R$", (valorPeso[i] * taxaRegiao[i])::2);
+			escreval("TIPO DE VEÍCULO: ",tipoVeiculo[i], " / PERCENTUAL DA TAXA = ", taxaVei[i] * 100::2, "%");
+			escreval("VALOR DA TAXA PELO TIPO DE VEÍCULO = R$",(valorPeso[i] * taxaVei[i])::2);
+			escreval("VALOR FINAL = R$", valorTotal[i]::2);
+			escreval("PORCENTAGEM DA EMPRESA = R$", percentEmpresa[i]::2);
+			escreval("PORCENTAGEM DO ENTREGADOR = R$", percentEntregador[i]::2);
+			escreval("");
+          
+		fimPara
+	fimSe
+
+fimPrincipal
+
+funcao inteiro menu()
+	escreval("-------------------------BEM-VINDO AO MENU DE OPÇÕES DE FRETE----------------------------------");
+	escreval("");
+	escreval("FRENTE É COBRADO EM CIMA DO VALOR DO PESO(KG) DA CARGA, CUSTANDO R$5,20 POR KG.");
+	escreval("");
+	escreval("EMPRESA RECEBE PERCENTUAL DE 65% DO VALOR TOTAL DO FRENTE.");
+	escreval("");
+	escreval("ENTREGADOR RECEBE O PERCENTUAL DE 35% DO VALOR TOTAL DO FRETE.");
+	escreval("-----------------------TAXA DE VALORES ADICIONADOS AO FRETE POR REGIÃO---------------------------");
+	escreval("NORTE -> 45,59%");
+	escreval("NORDESTE -> 40,35%");
+	escreval("CENTRO-0ESTE -> 21,96%");
+	escreval("SUDESTE -> 32,48%");
+	escreval("SUL -> 36,73%");
+	escreval("----------------------TAXA DE VALORES ADICONAIS DE ACORDO COM A OPÇÃO DE VEÍCULO-------------------");
+	escreval("KOMBI -> 64,85%");
+	escreval("VAN -> 43,15%");
+	escreval("CAMINHÃO -> 22,50%");
+	escreval("----------------------------------------------------------------------------------------------------");
+	escreval("");
+	retorna 0;
+fimFuncao
